@@ -13,31 +13,33 @@ import com.decodex.br.domain.port.out.PersonRepositoryPort;
 
 @Component
 public class PersonRepositoryAdapter implements PersonRepositoryPort {
-	
-	private final PersonJpaRepository repository;
+
+    private final PersonJpaRepository repository;
+    private final PersonMapper mapper;
 
     public PersonRepositoryAdapter(PersonJpaRepository repository) {
         this.repository = repository;
+        this.mapper = new PersonMapper();
     }
 
     @Override
     public Person save(Person person) {
-        return PersonMapper.toDomain(
-            repository.save(PersonMapper.toEntity(person))
+        return mapper.toDomain(
+            repository.save(mapper.toEntity(person))
         );
     }
 
     @Override
     public Optional<Person> findById(Long id) {
         return repository.findById(id)
-                .map(PersonMapper::toDomain);
+                .map(mapper::toDomain);
     }
 
     @Override
     public List<Person> findAll() {
         return repository.findAll()
                 .stream()
-                .map(PersonMapper::toDomain)
+                .map(mapper::toDomain)
                 .collect(Collectors.toList());
     }
 
@@ -45,5 +47,4 @@ public class PersonRepositoryAdapter implements PersonRepositoryPort {
     public void deleteById(Long id) {
         repository.deleteById(id);
     }
-
 }
