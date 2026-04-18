@@ -36,6 +36,15 @@ public class Book {
     public void alterarPreco(Double novoPreco) {
         this.price = validarPreco(novoPreco);
     }
+    
+    public void alterarNome(String author,String title) {
+    	this.author = validarTexto(author, "Nome");
+    	this.title = validarTexto(title,"Titulo");
+    }
+    
+    public void alterarDataLancamento(LocalDate novaData) {
+        this.launchDate = Objects.requireNonNull(novaData, "Data de lançamento não pode ser nula");
+    }
 
     public Long getId() { return id; }
     public String getAuthor() { return author; }
