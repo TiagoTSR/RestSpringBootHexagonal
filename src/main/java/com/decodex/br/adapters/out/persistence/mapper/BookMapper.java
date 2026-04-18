@@ -5,23 +5,23 @@ import com.decodex.br.domain.model.Book;
 
 public class BookMapper {
 
-	public static Book toDomain(BookEntity entity) {
-	    return new Book(
-	        entity.getId(),
-	        entity.getAuthor(),
-	        entity.getLaunchDate(),
-	        entity.getPrice(),
-	        entity.getTitle()
-	    );
-	}
+    public Book toDomain(BookEntity entity) {
+        return new Book(
+            entity.getId(),
+            entity.getAuthor(),
+            entity.getLaunchDate(),
+            entity.getPrice(),
+            entity.getTitle()
+        );
+    }
 
-	public static BookEntity toEntity(Book book) {
-	    BookEntity entity = new BookEntity();
-	    entity.setId(book.getId());
-	    entity.setAuthor(book.getAuthor());
-	    entity.setLaunchDate(book.getLaunchDate());
-	    entity.setPrice(book.getPrice());
-	    entity.setTitle(book.getTitle());
-	    return entity;
-	}
+    public BookEntity toEntity(Book book) {
+        BookEntity entity = new BookEntity();
+        entity.setId(book.getId());
+        entity.setAuthor(book.getAuthor());
+        entity.setLaunchDate(book.getLaunchDate());
+        entity.setPrice(book.getPrice());
+        entity.setTitle(book.getTitle());
+        return entity;
+    }
 }
