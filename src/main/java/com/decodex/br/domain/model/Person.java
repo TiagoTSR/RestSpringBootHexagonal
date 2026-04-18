@@ -33,6 +33,10 @@ public class Person {
         this.firstName = validarTexto(primeiroNome, "First name");
         this.lastName = validarTexto(sobrenome, "Last name");
     }
+    
+    public void alterarGender(Gender novoGender) {
+        this.gender = Objects.requireNonNull(novoGender, "Gender não pode ser nulo");
+    }
 
     public Long getId() { return id; }
     public String getFirstName() { return firstName; }
