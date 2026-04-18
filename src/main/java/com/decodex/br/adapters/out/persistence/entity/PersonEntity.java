@@ -3,12 +3,17 @@ package com.decodex.br.adapters.out.persistence.entity;
 import com.decodex.br.domain.model.Gender;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "person")
 public class PersonEntity {
 	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
     private String firstName;
     private String lastName;
