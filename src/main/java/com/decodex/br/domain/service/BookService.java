@@ -34,14 +34,10 @@ public class BookService implements BookUseCase {
     public Book update(Long id, Book bookDetails) {
         Book existing = findById(id);
 
-        existing = new Book(
-                existing.getId(),
-                bookDetails.getAuthor(),
-                bookDetails.getLaunchDate(),
-                bookDetails.getPrice(),
-                bookDetails.getTitle()
-        );
-
+        existing.alterarDataLancamento(bookDetails.getLaunchDate());
+        existing.alterarNome(bookDetails.getAuthor(), bookDetails.getTitle());
+        existing.alterarPreco(bookDetails.getPrice());
+       
         return repository.save(existing);
     }
 
