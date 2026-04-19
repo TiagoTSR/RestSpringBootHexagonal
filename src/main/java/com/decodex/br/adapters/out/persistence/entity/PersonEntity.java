@@ -3,6 +3,8 @@ package com.decodex.br.adapters.out.persistence.entity;
 import com.decodex.br.domain.model.Gender;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,6 +20,8 @@ public class PersonEntity {
     private String firstName;
     private String lastName;
     private String address;
+    
+    @Enumerated(EnumType.STRING)
     private Gender gender;
     
 	public Long getId() {
