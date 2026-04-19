@@ -17,12 +17,23 @@ public class BookDTOMapper {
         );
     }
 
-    public static void updateDomain(Book book, BookUpdateDTO dto) {
-        book.alterarNome(dto.getAuthor(), dto.getTitle());
-        book.alterarPreco(dto.getPrice());
-        book.alterarDataLancamento(dto.getLaunchDate());
+	public static void updateDomain(Book book, BookUpdateDTO dto) {
 
-    }
+	    if (dto.getAuthor() != null || dto.getTitle() != null) {
+	        book.alterarNome(
+	            dto.getAuthor() != null ? dto.getAuthor() : book.getAuthor(),
+	            dto.getTitle() != null ? dto.getTitle() : book.getTitle()
+	        );
+	    }
+
+	    if (dto.getPrice() != null) {
+	        book.alterarPreco(dto.getPrice());
+	    }
+
+	    if (dto.getLaunchDate() != null) {
+	        book.alterarDataLancamento(dto.getLaunchDate());
+	    }
+	}
 
     public static BookResponseDTO toDTO(Book book) {
         BookResponseDTO dto = new BookResponseDTO();

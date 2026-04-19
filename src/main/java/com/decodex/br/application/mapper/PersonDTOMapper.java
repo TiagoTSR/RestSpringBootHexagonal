@@ -19,14 +19,23 @@ public class PersonDTOMapper {
     }
 
     public static void updateDomain(Person person, PersonUpdateDTO dto) {
-        person.alterarNome(dto.getFirstName(), dto.getLastName());
-        person.alterarEndereco(dto.getAddress());
+
+        if (dto.getFirstName() != null || dto.getLastName() != null) {
+            person.alterarNome(
+                dto.getFirstName() != null ? dto.getFirstName() : person.getFirstName(),
+                dto.getLastName() != null ? dto.getLastName() : person.getLastName()
+            );
+        }
+
+        if (dto.getAddress() != null) {
+            person.alterarEndereco(dto.getAddress());
+        }
 
         if (dto.getGender() != null) {
             person.alterarGender(Gender.fromString(dto.getGender()));
         }
     }
-
+    
     public static PersonResponseDTO toDTO(Person person) {
         PersonResponseDTO dto = new PersonResponseDTO();
         dto.setId(person.getId());
