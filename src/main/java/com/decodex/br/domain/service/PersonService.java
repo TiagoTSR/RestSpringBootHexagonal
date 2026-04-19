@@ -2,6 +2,7 @@ package com.decodex.br.domain.service;
 
 import java.util.List;
 
+import com.decodex.br.domain.exception.ResourceNotFoundException;
 import com.decodex.br.domain.model.Person;
 import com.decodex.br.domain.port.in.PersonUseCase;
 import com.decodex.br.domain.port.out.PersonRepositoryPort;
@@ -22,7 +23,7 @@ public class PersonService implements PersonUseCase {
     @Override
     public Person findById(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Person não encontrada com id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Person não encontrada com id: " + id));
     }
 
     @Override
