@@ -2,13 +2,10 @@ package com.decodex.br.domain.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.decodex.br.domain.model.Book;
 import com.decodex.br.domain.port.in.BookUseCase;
 import com.decodex.br.domain.port.out.BookRepositoryPort;
 
-@Service
 public class BookService implements BookUseCase {
 
     private final BookRepositoryPort repository;

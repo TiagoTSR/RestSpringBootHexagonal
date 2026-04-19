@@ -2,13 +2,10 @@ package com.decodex.br.domain.service;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-
 import com.decodex.br.domain.model.Person;
 import com.decodex.br.domain.port.in.PersonUseCase;
 import com.decodex.br.domain.port.out.PersonRepositoryPort;
 
-@Service
 public class PersonService implements PersonUseCase {
 
     private final PersonRepositoryPort repository;
