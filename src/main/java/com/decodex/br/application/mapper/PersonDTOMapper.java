@@ -11,38 +11,39 @@ public class PersonDTOMapper {
     public static Person toDomain(PersonCreateDTO dto) {
         return new Person(
             null,
-            dto.getFirstName(),
-            dto.getLastName(),
-            dto.getAddress(),
-            Gender.fromString(dto.getGender())
+            dto.firstName(),
+            dto.firstName(),
+            dto.address(),
+            Gender.fromString(dto.gender())
         );
     }
 
     public static void updateDomain(Person person, PersonUpdateDTO dto) {
 
-        if (dto.getFirstName() != null || dto.getLastName() != null) {
+        if (dto.firstName() != null || dto.firstName() != null) {
             person.alterarNome(
-                dto.getFirstName() != null ? dto.getFirstName() : person.getFirstName(),
-                dto.getLastName() != null ? dto.getLastName() : person.getLastName()
+                dto.firstName() != null ? dto.firstName() : person.getFirstName(),
+                dto.firstName() != null ? dto.firstName() : person.getLastName()
             );
         }
 
-        if (dto.getAddress() != null) {
-            person.alterarEndereco(dto.getAddress());
+        if (dto.address() != null) {
+            person.alterarEndereco(dto.address());
         }
 
-        if (dto.getGender() != null) {
-            person.alterarGender(Gender.fromString(dto.getGender()));
+        if (dto.gender() != null) {
+            person.alterarGender(Gender.fromString(dto.gender()));
         }
     }
     
     public static PersonResponseDTO toDTO(Person person) {
-        PersonResponseDTO dto = new PersonResponseDTO();
-        dto.setId(person.getId());
-        dto.setFirstName(person.getFirstName());
-        dto.setLastName(person.getLastName());
-        dto.setAddress(person.getAddress());
-        dto.setGender(person.getGender().name());
-        return dto;
-    }
+	    return new PersonResponseDTO(
+	    	person.getId(),
+	    	person.getFirstName(),
+	    	person.getLastName(),
+	    	person.getAddress(),
+	    	person.getGender().name()
+	    );
+	}
+
 }
