@@ -12,6 +12,8 @@ import com.decodex.br.application.mapper.BookDTOMapper;
 import com.decodex.br.domain.model.Book;
 import com.decodex.br.domain.port.in.BookUseCase;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
@@ -36,7 +38,7 @@ public class BookController {
     }
 
     @PostMapping
-    public BookResponseDTO create(@RequestBody BookCreateDTO dto) {
+    public BookResponseDTO create(@Valid @RequestBody BookCreateDTO dto) {
         Book book = BookDTOMapper.toDomain(dto);
         Book saved = useCase.create(book);
         return BookDTOMapper.toDTO(saved);

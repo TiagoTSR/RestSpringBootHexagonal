@@ -3,7 +3,14 @@ package com.decodex.br.adapters.in.web;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.decodex.br.application.dto.person.PersonCreateDTO;
 import com.decodex.br.application.dto.person.PersonResponseDTO;
@@ -11,6 +18,8 @@ import com.decodex.br.application.dto.person.PersonUpdateDTO;
 import com.decodex.br.application.mapper.PersonDTOMapper;
 import com.decodex.br.domain.model.Person;
 import com.decodex.br.domain.port.in.PersonUseCase;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/persons")
@@ -36,7 +45,7 @@ public class PersonController {
     }
 
     @PostMapping
-    public PersonResponseDTO create(@RequestBody PersonCreateDTO dto) {
+    public PersonResponseDTO create(@Valid @RequestBody PersonCreateDTO dto) {
         Person person = PersonDTOMapper.toDomain(dto);
         Person saved = useCase.create(person);
         return PersonDTOMapper.toDTO(saved);

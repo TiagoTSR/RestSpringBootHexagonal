@@ -1,6 +1,7 @@
 package com.decodex.br.adapters.in.web.exception;
 
 import java.time.LocalDateTime;
+import java.util.Map;
 
 public class ErrorResponse {
 
@@ -9,6 +10,7 @@ public class ErrorResponse {
     private String error;
     private String message;
     private String path;
+    private Map<String, String> fields;
 
     public ErrorResponse(int status, String error, String message, String path) {
         this.timestamp = LocalDateTime.now();
@@ -16,6 +18,14 @@ public class ErrorResponse {
         this.error = error;
         this.message = message;
         this.path = path;
+    }
+    
+    public void setFields(Map<String, String> fields) {
+        this.fields = fields;
+    }
+
+    public Map<String, String> getFields() {
+        return fields;
     }
 
     public LocalDateTime getTimestamp() { return timestamp; }
