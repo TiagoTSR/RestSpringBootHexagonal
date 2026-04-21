@@ -1,8 +1,10 @@
 package com.decodex.br.application.dto.person;
 
+import com.decodex.br.domain.model.Gender;
+
 public record PersonUpdateDTO (	
 		String firstName,
 	    String lastName,
 	    String address,
-	    String gender
+	    Gender gender
 ) {}
