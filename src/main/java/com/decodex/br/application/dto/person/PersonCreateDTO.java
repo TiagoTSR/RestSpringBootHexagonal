@@ -3,6 +3,7 @@ package com.decodex.br.application.dto.person;
 import com.decodex.br.domain.model.Gender;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public record PersonCreateDTO (	
 		
@@ -15,6 +16,6 @@ public record PersonCreateDTO (
     @NotBlank(message = "Address não pode estar vazio")
     String address,
     
-    @NotBlank(message = "Gender não pode estar vazio")
+    @NotNull(message = "Gender não pode estar vazio")
 	Gender gender
 ) {}
