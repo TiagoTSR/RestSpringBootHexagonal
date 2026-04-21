@@ -3,7 +3,6 @@ package com.decodex.br.application.mapper;
 import com.decodex.br.application.dto.person.PersonCreateDTO;
 import com.decodex.br.application.dto.person.PersonResponseDTO;
 import com.decodex.br.application.dto.person.PersonUpdateDTO;
-import com.decodex.br.domain.model.Gender;
 import com.decodex.br.domain.model.Person;
 
 public class PersonDTOMapper {
@@ -12,18 +11,18 @@ public class PersonDTOMapper {
         return new Person(
             null,
             dto.firstName(),
-            dto.firstName(),
+            dto.lastName(),
             dto.address(),
-            Gender.fromString(dto.gender())
+            dto.gender()
         );
     }
 
     public static void updateDomain(Person person, PersonUpdateDTO dto) {
 
-        if (dto.firstName() != null || dto.firstName() != null) {
+        if (dto.firstName() != null || dto.lastName() != null) {
             person.alterarNome(
                 dto.firstName() != null ? dto.firstName() : person.getFirstName(),
-                dto.firstName() != null ? dto.firstName() : person.getLastName()
+                dto.lastName() != null ? dto.lastName() : person.getLastName()
             );
         }
 
@@ -32,7 +31,7 @@ public class PersonDTOMapper {
         }
 
         if (dto.gender() != null) {
-            person.alterarGender(Gender.fromString(dto.gender()));
+            person.alterarGender(dto.gender());
         }
     }
     
@@ -42,7 +41,7 @@ public class PersonDTOMapper {
 	    	person.getFirstName(),
 	    	person.getLastName(),
 	    	person.getAddress(),
-	    	person.getGender().name()
+	    	person.getGender()
 	    );
 	}
 
