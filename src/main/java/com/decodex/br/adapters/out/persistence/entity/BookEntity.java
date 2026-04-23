@@ -1,5 +1,6 @@
 package com.decodex.br.adapters.out.persistence.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
@@ -20,7 +21,7 @@ public class BookEntity {
 
     private LocalDate launchDate;
 
-    private Double price;
+    private BigDecimal price;
 
     private String title;
 
@@ -48,11 +49,11 @@ public class BookEntity {
 		this.launchDate = launchDate;
 	}
 
-	public Double getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 

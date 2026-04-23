@@ -1,5 +1,6 @@
 package com.decodex.br.application.dto.book;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import jakarta.validation.constraints.NotBlank;
@@ -16,7 +17,7 @@ public record BookCreateDTO(
 	    
 	    @NotNull(message = "Preço é obrigatório")
 	    @Positive(message = "Preço deve ser maior que zero")
-	    Double price,
+		BigDecimal price,
 	    
 	    @NotBlank(message = "Title não pode estar vazio")
 	    String title

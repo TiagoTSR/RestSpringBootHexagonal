@@ -1,5 +1,6 @@
 package com.decodex.br.domain.model;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -8,10 +9,10 @@ public class Book {
     private Long id;
     private String author;
     private LocalDate launchDate;
-    private Double price;
+    private BigDecimal price;
     private String title;
 
-    public Book(Long id, String author, LocalDate launchDate, Double price, String title) {
+    public Book(Long id, String author, LocalDate launchDate, BigDecimal price, String title) {
         this.id = id;
         this.author = validarTexto(author, "Author");
         this.launchDate = Objects.requireNonNull(launchDate, "Launch date não pode ser nula");
@@ -19,21 +20,21 @@ public class Book {
         this.title = validarTexto(title, "Title");
     }
 
-    private String validarTexto(String valor, String campo) {
+	private String validarTexto(String valor, String campo) {
         if (valor == null || valor.isBlank()) {
             throw new IllegalArgumentException(campo + " não pode ser vazio");
         }
         return valor;
     }
 
-    private Double validarPreco(Double price) {
-        if (price == null || price <= 0) {
+    private BigDecimal validarPreco(BigDecimal price) {
+    	if (price == null || price.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Preço deve ser maior que zero");
         }
         return price;
     }
 
-    public void alterarPreco(Double novoPreco) {
+    public void alterarPreco(BigDecimal novoPreco) {
         this.price = validarPreco(novoPreco);
     }
     
@@ -49,7 +50,7 @@ public class Book {
     public Long getId() { return id; }
     public String getAuthor() { return author; }
     public LocalDate getLaunchDate() { return launchDate; }
-    public Double getPrice() { return price; }
+    public BigDecimal getPrice() { return price; }
     public String getTitle() { return title; }
 
     @Override
