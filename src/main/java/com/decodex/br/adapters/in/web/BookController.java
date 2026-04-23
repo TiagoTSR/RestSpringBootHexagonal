@@ -1,7 +1,6 @@
 package com.decodex.br.adapters.in.web;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +16,8 @@ import com.decodex.br.application.dto.book.BookResponseDTO;
 import com.decodex.br.application.dto.book.BookUpdateDTO;
 import com.decodex.br.application.mapper.BookDTOMapper;
 import com.decodex.br.domain.model.Book;
+import com.decodex.br.domain.pagination.PageRequest;
+import com.decodex.br.domain.pagination.PageResult;
 import com.decodex.br.domain.port.in.BookUseCase;
 
 import jakarta.validation.Valid;
@@ -32,16 +33,12 @@ public class BookController {
     }
 
     @GetMapping
-    public Page<BookResponseDTO> findAll(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+    public PageResult<BookResponseDTO> findAll(
+            @RequestParam int page,
+            @RequestParam int size
     ) {
-
-        Page<Book> result = useCase.findAll(
-            PageRequest.of(page, size)
-        );
-
-        return result.map(BookDTOMapper::toDTO);
+        return useCase.findAll(new PageRequest(page, size))
+                .map(BookDTOMapper::toDTO);
     }
 
     @GetMapping("/{id}")

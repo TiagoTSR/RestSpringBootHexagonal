@@ -1,10 +1,9 @@
 package com.decodex.br.domain.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import com.decodex.br.domain.exception.ResourceNotFoundException;
 import com.decodex.br.domain.model.Book;
+import com.decodex.br.domain.pagination.PageRequest;
+import com.decodex.br.domain.pagination.PageResult;
 import com.decodex.br.domain.port.in.BookUseCase;
 import com.decodex.br.domain.port.out.BookRepositoryPort;
 
@@ -17,8 +16,8 @@ public class BookService implements BookUseCase {
     }
 
     @Override
-    public Page<Book> findAll(Pageable pageable) {
-        return repository.findAll(pageable);
+    public PageResult<Book> findAll(PageRequest pageRequest) {
+        return repository.findAll(pageRequest);
     }
 
     @Override

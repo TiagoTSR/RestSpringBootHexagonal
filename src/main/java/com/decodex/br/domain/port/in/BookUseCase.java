@@ -1,13 +1,12 @@
 package com.decodex.br.domain.port.in;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import com.decodex.br.domain.model.Book;
+import com.decodex.br.domain.pagination.PageRequest;
+import com.decodex.br.domain.pagination.PageResult;
 
 public interface BookUseCase {
 
-	Page<Book> findAll(Pageable pageable);
+	PageResult<Book> findAll(PageRequest pageRequest);
 
     Book findById(Long id);
 

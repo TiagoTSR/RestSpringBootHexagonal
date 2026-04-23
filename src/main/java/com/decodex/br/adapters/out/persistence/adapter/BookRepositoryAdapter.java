@@ -3,12 +3,14 @@ package com.decodex.br.adapters.out.persistence.adapter;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import com.decodex.br.adapters.out.persistence.entity.BookEntity;
 import com.decodex.br.adapters.out.persistence.mapper.BookMapper;
 import com.decodex.br.adapters.out.persistence.repository.BookJpaRepository;
 import com.decodex.br.domain.model.Book;
+import com.decodex.br.domain.pagination.PageRequest;
+import com.decodex.br.domain.pagination.PageResult;
 import com.decodex.br.domain.port.out.BookRepositoryPort;
 
 @Component
@@ -36,9 +38,22 @@ public class BookRepositoryAdapter implements BookRepositoryPort {
     }
 
     @Override
-    public Page<Book> findAll(Pageable pageable) {
-        return repository.findAll(pageable)
-                .map(mapper::toDomain);
+    public PageResult<Book> findAll(PageRequest request) {
+
+        Page<BookEntity> page = repository.findAll(
+            org.springframework.data.domain.PageRequest.of(
+                request.getPage(),
+                request.getSize()
+            )
+        );
+
+        return new PageResult<>(
+            page.getContent().stream().map(mapper::toDomain).toList(),
+            page.getNumber(),
+            page.getSize(),
+            page.getTotalElements(),
+            page.getTotalPages()
+        );
     }
 
     @Override
