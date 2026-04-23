@@ -3,11 +3,13 @@ package com.decodex.br.adapters.out.persistence.adapter;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
 import com.decodex.br.adapters.out.persistence.entity.BookEntity;
 import com.decodex.br.adapters.out.persistence.mapper.BookMapper;
 import com.decodex.br.adapters.out.persistence.repository.BookJpaRepository;
+import com.decodex.br.domain.filter.BookFilter;
 import com.decodex.br.domain.model.Book;
 import com.decodex.br.domain.pagination.PageRequest;
 import com.decodex.br.domain.pagination.PageResult;
@@ -38,14 +40,39 @@ public class BookRepositoryAdapter implements BookRepositoryPort {
     }
 
     @Override
-    public PageResult<Book> findAll(PageRequest request) {
+    public PageResult<Book> findAll(BookFilter filter, PageRequest request) {
 
-        Page<BookEntity> page = repository.findAll(
+        org.springframework.data.domain.Pageable pageable =
             org.springframework.data.domain.PageRequest.of(
                 request.getPage(),
                 request.getSize()
-            )
-        );
+            );
+
+        Specification<BookEntity> spec = (root, query, cb) -> cb.conjunction();
+
+        if (filter.getTitle() != null) {
+            spec = spec.and((root, query, cb) ->
+                cb.like(cb.lower(root.get("title")),
+                    "%" + filter.getTitle().toLowerCase() + "%"));
+        }
+
+        if (filter.getAuthor() != null) {
+            spec = spec.and((root, query, cb) ->
+                cb.like(cb.lower(root.get("author")),
+                    "%" + filter.getAuthor().toLowerCase() + "%"));
+        }
+
+        if (filter.getLaunchDate() != null) {
+            spec = spec.and((root, query, cb) ->
+                cb.equal(root.get("launchDate"), filter.getLaunchDate()));
+        }
+
+        if (filter.getPrice() != null) {
+            spec = spec.and((root, query, cb) ->
+                cb.equal(root.get("price"), filter.getPrice()));
+        }
+
+        Page<BookEntity> page = repository.findAll(spec, pageable);
 
         return new PageResult<>(
             page.getContent().stream().map(mapper::toDomain).toList(),

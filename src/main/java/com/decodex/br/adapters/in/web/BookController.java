@@ -1,6 +1,8 @@
 package com.decodex.br.adapters.in.web;
 
 
+import java.time.LocalDate;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +17,7 @@ import com.decodex.br.application.dto.book.BookCreateDTO;
 import com.decodex.br.application.dto.book.BookResponseDTO;
 import com.decodex.br.application.dto.book.BookUpdateDTO;
 import com.decodex.br.application.mapper.BookDTOMapper;
+import com.decodex.br.domain.filter.BookFilter;
 import com.decodex.br.domain.model.Book;
 import com.decodex.br.domain.pagination.PageRequest;
 import com.decodex.br.domain.pagination.PageResult;
@@ -34,10 +37,17 @@ public class BookController {
 
     @GetMapping
     public PageResult<BookResponseDTO> findAll(
-            @RequestParam int page,
-            @RequestParam int size
+            @RequestParam(required = false) String author,
+            @RequestParam(required = false) LocalDate launchDate,
+            @RequestParam(required = false) Double price,
+            @RequestParam(required = false) String title,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
-        return useCase.findAll(new PageRequest(page, size))
+
+        BookFilter filter = new BookFilter(author, launchDate,price, title);
+
+        return useCase.findAll(filter, new PageRequest(page, size))
                 .map(BookDTOMapper::toDTO);
     }
 

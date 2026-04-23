@@ -1,6 +1,7 @@
 package com.decodex.br.domain.service;
 
 import com.decodex.br.domain.exception.ResourceNotFoundException;
+import com.decodex.br.domain.filter.BookFilter;
 import com.decodex.br.domain.model.Book;
 import com.decodex.br.domain.pagination.PageRequest;
 import com.decodex.br.domain.pagination.PageResult;
@@ -16,8 +17,8 @@ public class BookService implements BookUseCase {
     }
 
     @Override
-    public PageResult<Book> findAll(PageRequest pageRequest) {
-        return repository.findAll(pageRequest);
+    public PageResult<Book> findAll(BookFilter filter,PageRequest pageRequest) {
+        return repository.findAll(filter,pageRequest);
     }
 
     @Override
