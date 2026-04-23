@@ -1,12 +1,13 @@
 package com.decodex.br.domain.port.in;
 
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.decodex.br.domain.model.Book;
 
 public interface BookUseCase {
 
-    List<Book> findAll();
+	Page<Book> findAll(Pageable pageable);
 
     Book findById(Long id);
 

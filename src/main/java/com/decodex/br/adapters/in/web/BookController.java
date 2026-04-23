@@ -1,9 +1,16 @@
 package com.decodex.br.adapters.in.web;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.decodex.br.application.dto.book.BookCreateDTO;
 import com.decodex.br.application.dto.book.BookResponseDTO;
@@ -25,11 +32,16 @@ public class BookController {
     }
 
     @GetMapping
-    public List<BookResponseDTO> findAll() {
-        return useCase.findAll()
-                .stream()
-                .map(BookDTOMapper::toDTO)
-                .collect(Collectors.toList());
+    public Page<BookResponseDTO> findAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
+    ) {
+
+        Page<Book> result = useCase.findAll(
+            PageRequest.of(page, size)
+        );
+
+        return result.map(BookDTOMapper::toDTO);
     }
 
     @GetMapping("/{id}")

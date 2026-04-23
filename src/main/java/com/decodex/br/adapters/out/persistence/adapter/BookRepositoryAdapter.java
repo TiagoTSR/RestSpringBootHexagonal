@@ -1,9 +1,9 @@
 package com.decodex.br.adapters.out.persistence.adapter;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import com.decodex.br.adapters.out.persistence.mapper.BookMapper;
@@ -36,11 +36,9 @@ public class BookRepositoryAdapter implements BookRepositoryPort {
     }
 
     @Override
-    public List<Book> findAll() {
-        return repository.findAll()
-                .stream()
-                .map(mapper::toDomain)
-                .collect(Collectors.toList());
+    public Page<Book> findAll(Pageable pageable) {
+        return repository.findAll(pageable)
+                .map(mapper::toDomain);
     }
 
     @Override
