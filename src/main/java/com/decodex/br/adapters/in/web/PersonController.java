@@ -14,6 +14,8 @@ import com.decodex.br.application.dto.person.PersonCreateDTO;
 import com.decodex.br.application.dto.person.PersonResponseDTO;
 import com.decodex.br.application.dto.person.PersonUpdateDTO;
 import com.decodex.br.application.mapper.PersonDTOMapper;
+import com.decodex.br.domain.filter.PersonFilter;
+import com.decodex.br.domain.model.Gender;
 import com.decodex.br.domain.model.Person;
 import com.decodex.br.domain.pagination.PageRequest;
 import com.decodex.br.domain.pagination.PageResult;
@@ -33,10 +35,17 @@ public class PersonController {
 
     @GetMapping
     public PageResult<PersonResponseDTO> findAll(
-            @RequestParam int page,
-            @RequestParam int size
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName,
+            @RequestParam(required = false) String address,
+            @RequestParam(required = false) Gender gender,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size
     ) {
-        return useCase.findAll(new PageRequest(page, size))
+
+        PersonFilter filter = new PersonFilter(firstName, lastName,address, gender);
+
+        return useCase.findAll(filter, new PageRequest(page, size))
                 .map(PersonDTOMapper::toDTO);
     }
 

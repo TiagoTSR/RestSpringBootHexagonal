@@ -1,12 +1,13 @@
 package com.decodex.br.domain.port.in;
 
+import com.decodex.br.domain.filter.PersonFilter;
 import com.decodex.br.domain.model.Person;
 import com.decodex.br.domain.pagination.PageRequest;
 import com.decodex.br.domain.pagination.PageResult;
 
 public interface PersonUseCase {
 
-	PageResult<Person> findAll(PageRequest pageRequest);
+	PageResult<Person> findAll(PersonFilter filter,PageRequest pageRequest);
 
     Person findById(Long id);
 
