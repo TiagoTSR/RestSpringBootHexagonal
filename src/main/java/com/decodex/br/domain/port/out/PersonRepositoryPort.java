@@ -1,7 +1,9 @@
 package com.decodex.br.domain.port.out;
 
-import java.util.List;
 import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import com.decodex.br.domain.model.Person;
 
@@ -11,7 +13,7 @@ public interface PersonRepositoryPort {
 
     Optional<Person> findById(Long id);
 
-    List<Person> findAll();
+    Page<Person> findAll(Pageable pageable);
 
     void deleteById(Long id);
 }
