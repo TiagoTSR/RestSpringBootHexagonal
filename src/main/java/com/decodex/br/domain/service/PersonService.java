@@ -1,10 +1,9 @@
 package com.decodex.br.domain.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import com.decodex.br.domain.exception.ResourceNotFoundException;
 import com.decodex.br.domain.model.Person;
+import com.decodex.br.domain.pagination.PageRequest;
+import com.decodex.br.domain.pagination.PageResult;
 import com.decodex.br.domain.port.in.PersonUseCase;
 import com.decodex.br.domain.port.out.PersonRepositoryPort;
 
@@ -17,10 +16,10 @@ public class PersonService implements PersonUseCase {
     }
 
     @Override
-    public Page<Person> findAll(Pageable pageable) {
-        return repository.findAll(pageable);
+    public PageResult<Person> findAll(PageRequest pageRequest) {
+        return repository.findAll(pageRequest);
     }
-
+    
     @Override
     public Person findById(Long id) {
         return repository.findById(id)

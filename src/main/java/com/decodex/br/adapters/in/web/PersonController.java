@@ -1,7 +1,5 @@
 package com.decodex.br.adapters.in.web;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +15,8 @@ import com.decodex.br.application.dto.person.PersonResponseDTO;
 import com.decodex.br.application.dto.person.PersonUpdateDTO;
 import com.decodex.br.application.mapper.PersonDTOMapper;
 import com.decodex.br.domain.model.Person;
+import com.decodex.br.domain.pagination.PageRequest;
+import com.decodex.br.domain.pagination.PageResult;
 import com.decodex.br.domain.port.in.PersonUseCase;
 
 import jakarta.validation.Valid;
@@ -32,16 +32,12 @@ public class PersonController {
     }
 
     @GetMapping
-    public Page<PersonResponseDTO> findAll(
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size
+    public PageResult<PersonResponseDTO> findAll(
+            @RequestParam int page,
+            @RequestParam int size
     ) {
-
-        Page<Person> result = useCase.findAll(
-            PageRequest.of(page, size)
-        );
-
-        return result.map(PersonDTOMapper::toDTO);
+        return useCase.findAll(new PageRequest(page, size))
+                .map(PersonDTOMapper::toDTO);
     }
 
     @GetMapping("/{id}")
