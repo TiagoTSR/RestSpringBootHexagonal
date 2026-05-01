@@ -7,7 +7,6 @@ import java.util.Map;
 
 import javax.crypto.SecretKey;
 
-import com.decodex.br.config.property.RestSpring;
 import com.decodex.br.domain.model.Usuario;
 import com.decodex.br.domain.port.out.TokenPort;
 
@@ -18,11 +17,12 @@ import io.jsonwebtoken.security.Keys;
 
 public class JwtTokenAdapter implements TokenPort {
 
-    private static final int HORAS_EXPIRACAO = 1;
-    private final RestSpring property;
+    private final String secret;
+    private final int expiracaoHoras;
 
-    public JwtTokenAdapter(RestSpring property) {
-        this.property = property;
+    public JwtTokenAdapter(String secret, int expiracaoHoras) {
+        this.secret = secret;
+        this.expiracaoHoras = expiracaoHoras;
     }
 
     @Override
@@ -35,7 +35,7 @@ public class JwtTokenAdapter implements TokenPort {
                 .claims(claims)
                 .subject(usuario.getUsername())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 3600000L * HORAS_EXPIRACAO))
+                .expiration(new Date(System.currentTimeMillis() + 3600000L * expiracaoHoras))
                 .signWith(signingKey())
                 .compact();
     }
@@ -63,7 +63,6 @@ public class JwtTokenAdapter implements TokenPort {
     }
 
     private SecretKey signingKey() {
-        return Keys.hmacShaKeyFor(
-                property.getJwt().getSecret().getBytes(StandardCharsets.UTF_8));
+        return Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
     }
 }

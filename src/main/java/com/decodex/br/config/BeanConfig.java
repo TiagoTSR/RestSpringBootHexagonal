@@ -53,7 +53,10 @@ public class BeanConfig {
 
     @Bean
     public TokenPort tokenPort(RestSpring property) {
-        return new JwtTokenAdapter(property);
+        return new JwtTokenAdapter(
+            property.getJwt().getSecret(), 
+            property.getJwt().getExpiracaoHoras()
+        );
     }
 
     @Bean
