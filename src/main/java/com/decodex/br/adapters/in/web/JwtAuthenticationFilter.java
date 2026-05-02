@@ -8,8 +8,8 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.decodex.br.domain.port.in.AuthUseCase;
 import com.decodex.br.domain.port.out.TokenPort;
-import com.decodex.br.domain.port.out.UsuarioRepositoryPort;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -18,27 +18,30 @@ import jakarta.servlet.http.HttpServletResponse;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
+    private final AuthUseCase authUseCase;
     private final TokenPort tokenPort;
-    private final UsuarioRepositoryPort usuarioRepository;
 
-    public JwtAuthenticationFilter(TokenPort tokenPort,
-                                   UsuarioRepositoryPort usuarioRepository) {
+    public JwtAuthenticationFilter(AuthUseCase authUseCase,
+                                   TokenPort tokenPort) {
+        this.authUseCase = authUseCase;
         this.tokenPort = tokenPort;
-        this.usuarioRepository = usuarioRepository;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest req,
                                     HttpServletResponse res,
-                                    FilterChain chain) throws ServletException, IOException {
+                                    FilterChain chain)
+            throws ServletException, IOException {
 
         String header = req.getHeader("Authorization");
+
         if (header == null || !header.startsWith("Bearer ")) {
             chain.doFilter(req, res);
             return;
         }
 
         String jwt = header.substring(7);
+
         String username;
         try {
             username = tokenPort.extractUsername(jwt);
@@ -47,14 +50,20 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            usuarioRepository.findByUsername(username).ifPresent(usuario -> {
+        if (username != null &&
+            SecurityContextHolder.getContext().getAuthentication() == null) {
+
+            authUseCase.buscarUsuarioPorUsername(username).ifPresent(usuario -> {
+
                 if (tokenPort.isValid(jwt, usuario.getUsername())) {
+
                     var auth = new UsernamePasswordAuthenticationToken(
                             usuario.getUsername(),
                             null,
-                            List.of(new SimpleGrantedAuthority("ROLE_" + usuario.getRole().name()))
+                            List.of(new SimpleGrantedAuthority(
+                                    "ROLE_" + usuario.getRole().name()))
                     );
+
                     SecurityContextHolder.getContext().setAuthentication(auth);
                 }
             });

@@ -1,6 +1,8 @@
-package com.decodex.br.domain.service;
+package com.decodex.br.application.usecase;
 
 import java.util.Optional;
+
+import org.springframework.stereotype.Service;
 
 import com.decodex.br.application.dto.auth.LoginRequest;
 import com.decodex.br.application.dto.auth.LoginResponse;
@@ -12,47 +14,44 @@ import com.decodex.br.domain.port.out.PasswordCheckerPort;
 import com.decodex.br.domain.port.out.TokenPort;
 import com.decodex.br.domain.port.out.UsuarioRepositoryPort;
 
-public class AuthService implements AuthUseCase {
+@Service
+public class AuthUseCaseImpl implements AuthUseCase {
 
-    private final UsuarioRepositoryPort repository;
+    private final UsuarioRepositoryPort usuarioRepository;
     private final TokenPort tokenPort;
     private final PasswordCheckerPort passwordChecker;
 
-    public AuthService(
-            UsuarioRepositoryPort repository,
-            TokenPort tokenPort,
-            PasswordCheckerPort passwordChecker
-    ) {
-        this.repository = repository;
+    public AuthUseCaseImpl(UsuarioRepositoryPort usuarioRepository,
+                          TokenPort tokenPort,
+                          PasswordCheckerPort passwordChecker) {
+        this.usuarioRepository = usuarioRepository;
         this.tokenPort = tokenPort;
         this.passwordChecker = passwordChecker;
     }
 
     @Override
     public LoginResponse login(LoginRequest request) {
-        Usuario usuario = repository.findByUsername(request.username())
-                .orElseThrow(() -> {
-            
-                    return new CredenciaisInvalidasException();
-                });
 
-        boolean senhaOk = usuario.authenticate(request.password(), passwordChecker);
+        Usuario usuario = usuarioRepository.findByUsername(request.username())
+                .orElseThrow(() -> new CredenciaisInvalidasException());
 
-        if (!senhaOk) {
+        if (!usuario.authenticate(request.password(), passwordChecker)) {
             throw new CredenciaisInvalidasException();
         }
 
         String token = tokenPort.generate(usuario);
-        return new LoginResponse(token,
-                new UsuarioResponse(usuario.getId(), usuario.getUsername(), usuario.getRole().name()));
-    }
-    
-    @Override
-    public Optional<Usuario> buscarUsuarioPorUsername(String username) {
-        return repository.findByUsername(username);
+
+        UsuarioResponse usuarioResponse = new UsuarioResponse(
+                usuario.getId(),
+                usuario.getUsername(),
+                usuario.getRole().name()
+        );
+
+        return new LoginResponse(token, usuarioResponse);
     }
 
-    public boolean isTokenValido(String token, String username) {
-        return tokenPort.isValid(token, username);
+    @Override
+    public Optional<Usuario> buscarUsuarioPorUsername(String username) {
+        return usuarioRepository.findByUsername(username);
     }
 }
