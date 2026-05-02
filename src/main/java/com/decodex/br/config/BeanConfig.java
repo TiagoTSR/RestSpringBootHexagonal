@@ -7,7 +7,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.decodex.br.adapters.in.web.JwtAuthenticationFilter;
+import com.decodex.br.adapters.out.persistence.adapter.RefreshTokenRepositoryAdapter;
 import com.decodex.br.adapters.out.persistence.adapter.UsuarioRepositoryAdapter;
+import com.decodex.br.adapters.out.persistence.repository.RefreshTokenJpaRepository;
 import com.decodex.br.adapters.out.persistence.repository.UsuarioJpaRepository;
 import com.decodex.br.adapters.out.security.BcryptPasswordCheckerAdapter;
 import com.decodex.br.adapters.out.security.JwtTokenAdapter;
@@ -50,8 +52,8 @@ public class BeanConfig {
     @Bean
     public TokenPort tokenPort(RestSpring property) {
         return new JwtTokenAdapter(
-            property.getJwt().getSecret(), 
-            property.getJwt().getExpiracaoHoras()
+            property.getJwt().getSecret(),
+            property.getJwt().getExpiracaoMinutos()
         );
     }
 
@@ -61,10 +63,21 @@ public class BeanConfig {
     }
 
     @Bean
+    public RefreshTokenRepositoryAdapter refreshTokenRepositoryAdapter(
+            RefreshTokenJpaRepository jpa) {
+        return new RefreshTokenRepositoryAdapter(jpa);
+    }
+
+    @Bean
     public AuthUseCase authUseCase(UsuarioRepositoryAdapter repo,
-                                  TokenPort token,
-                                  PasswordCheckerPort checker) {
-        return new AuthUseCaseImpl(repo, token, checker);
+                                   TokenPort token,
+                                   PasswordCheckerPort checker,
+                                   RefreshTokenRepositoryAdapter refreshRepo,
+                                   RestSpring property) {
+        return new AuthUseCaseImpl(
+            repo, token, checker, refreshRepo,
+            property.getRefreshToken().getExpiracaoDias()
+        );
     }
 
     @Bean
